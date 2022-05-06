@@ -1,0 +1,20 @@
+skin_df = db[db.SkinThickness != 0 ]
+fig = plt.figure(figsize= (12,10))
+sns.heatmap(skin_df.corr(), annot = True)
+
+
+
+fig = plt.figure(figsize= (6,12))
+db.boxplot(column=["BMI"])
+
+
+
+top = 50
+bottom = 15
+segment = 5
+
+print("before" , db.SkinThickness.value_counts()[0])
+for i in range(int((top-bottom)/segment)):
+    temp_mean = skin_df[ (skin_df.BMI > bottom+i*segment) & (skin_df.BMI < bottom + (i+1) * segment) ].SkinThickness.mean()
+    db.loc[ ( db.SkinThickness == 0 ) & (db.BMI > bottom+i*segment) & (db.BMI < bottom + (i+1) * segment) , "SkinThickness" ] = temp_mean
+print("after" , db.SkinThickness.value_counts()[0])
